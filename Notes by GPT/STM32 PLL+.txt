@@ -1,0 +1,28 @@
+In STM32 microcontrollers, including the STM32F407VE, the **PLL**, **APB**, and **AHB** are components of the clock and bus system that help manage and distribute the clock frequencies to different parts of the chip. Here’s a breakdown of each:
+
+### 1. PLL (Phase-Locked Loop)
+The **PLL** is a frequency multiplier used in microcontrollers to generate a higher system clock frequency from a lower-frequency clock source, such as HSI (High-Speed Internal) or HSE (High-Speed External) oscillators.
+
+- **Function**: The PLL can take an input clock frequency (e.g., 16 MHz from HSI or 8-25 MHz from HSE) and multiply it to achieve a higher frequency for the microcontroller’s core and peripherals.
+- **Configuration**: The PLL has various multiplication and division factors that allow flexible frequency scaling. In the STM32F407VE, the PLL can provide system clocks up to the maximum allowed frequency of 168 MHz.
+- **Usage**: The PLL output is commonly used as the system clock, especially in applications requiring high processing speeds, while still using a low-frequency, stable clock source.
+
+### 2. AHB (Advanced High-performance Bus)
+The **AHB** (Advanced High-performance Bus) is the main bus in ARM Cortex-M-based microcontrollers that connects the CPU to high-speed peripherals and memory.
+
+- **Function**: The AHB connects the processor core to high-speed peripherals (like USB and Ethernet) and memory regions (like Flash and SRAM). It operates at a frequency determined by the system clock.
+- **AHB Prescaler**: The clock frequency of the AHB can be divided down from the main system clock using a prescaler, which helps balance power consumption and performance.
+- **Usage**: The AHB is designed for high-speed data transfer, so peripherals that require fast data access (like DMA and memory controllers) are typically connected to it.
+
+### 3. APB (Advanced Peripheral Bus)
+The **APB** (Advanced Peripheral Bus) is used to connect lower-speed peripherals, and the STM32 microcontrollers often have two APB buses:
+
+- **APB1**: Operates at a lower frequency (max 42 MHz on STM32F407VE) and connects peripherals that do not need high-speed access, like UART, I2C, and certain timers.
+- **APB2**: Operates at a higher frequency (max 84 MHz on STM32F407VE) and connects peripherals that need faster access, like the ADC and higher-speed timers.
+
+Each APB has its own **prescaler** to divide down the AHB clock, allowing more power-efficient operation of lower-speed peripherals.
+
+### Summary of the Relationships
+- **Clock Source (HSI or HSE)** → **PLL** (to scale frequency up) → **System Clock**
+- **System Clock** feeds the **AHB** bus (main high-speed bus for memory and high-speed peripherals).
+- The **AHB** bus clock is divided to generate the clocks for **APB1** and **APB2**, each of which connects to lower-speed peripherals and can operate at lower frequencies than AHB.
